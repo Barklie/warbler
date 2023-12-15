@@ -4,6 +4,9 @@ from datetime import datetime
 
 from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
+from forms import UpdateUserInfo
+from sqlalchemy.exc import IntegrityError
+
 
 bcrypt = Bcrypt()
 db = SQLAlchemy()
@@ -30,7 +33,7 @@ class Follows(db.Model):
 class Likes(db.Model):
     """Mapping user likes to warbles."""
 
-    __tablename__ = 'likes' 
+    __tablename__ = 'likes'
 
     id = db.Column(
         db.Integer,
@@ -121,13 +124,15 @@ class User(db.Model):
     def is_followed_by(self, other_user):
         """Is this user followed by `other_user`?"""
 
-        found_user_list = [user for user in self.followers if user == other_user]
+        found_user_list = [
+            user for user in self.followers if user == other_user]
         return len(found_user_list) == 1
 
     def is_following(self, other_user):
         """Is this user following `other_use`?"""
 
-        found_user_list = [user for user in self.following if user == other_user]
+        found_user_list = [
+            user for user in self.following if user == other_user]
         return len(found_user_list) == 1
 
     @classmethod
@@ -168,6 +173,30 @@ class User(db.Model):
                 return user
 
         return False
+
+    @classmethod
+    def update_user_profile(cls, current_username, new_username, new_email, new_image_url, new_header_image_url, new_bio, new_location, current_password):
+        user = cls.query.filter_by(username=current_username).first()
+        form = UpdateUserInfo()
+
+        is_auth = bcrypt.check_password_hash(user.password, current_password)
+        print("183******")
+        print(is_auth)
+        try:
+            if is_auth:
+
+                user.username = new_username
+                user.email = new_email
+                user.image_url = new_image_url
+                user.header_image_url = new_header_image_url
+                user.bio = new_bio
+                user.location = new_location
+
+                db.session.commit()
+
+        except IntegrityError:
+            form.feedback.errors.append(
+                'Password Incorrect. Please try again')
 
 
 class Message(db.Model):

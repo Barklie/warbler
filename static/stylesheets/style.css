@@ -16,6 +16,14 @@ body.error-404 {
   border-radius: 50px;
 }
 
+.btn-primary {
+  background-color: rgb(209, 243, 195);
+}
+
+.btn-secondary {
+  background-color: rgb(243, 195, 202);
+}
+
 .btn:hover {
   cursor: pointer;
 }
@@ -200,8 +208,15 @@ nav+.container {
   height: 360px;
   margin-top: -16px;
   opacity: 0.7;
-  background-size: cover;
+  background-size: contain;
   background-position: top center;
+
+
+}
+
+#warbler-hero img {
+  height: 360px;
+  width: 100%;
 }
 
 .full-width {
