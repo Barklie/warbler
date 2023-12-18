@@ -17,6 +17,7 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = (
     os.environ.get('DATABASE_URL', 'postgresql://barkliegriggs:12am@localhost:5432/warbler'))
 
+app.app_context().push()
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
@@ -365,11 +366,11 @@ def homepage():
         likes = Likes.query.filter_by(user_id=user.id).all()
 
         all_message_ids = [like.message_id for like in likes]
-        print("**********************")
-        print(likes)
-        print("**********************")
-        print(all_message_ids)
-        print("**********************")
+        # print("**********************")
+        # print(likes)
+        # print("**********************")
+        # print(all_message_ids)
+        # print("**********************")
 
         following_user_ids = [followed.id for followed in user.following]
 
